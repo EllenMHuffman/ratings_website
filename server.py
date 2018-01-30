@@ -59,6 +59,33 @@ def submit_reg_form():
     return redirect('/')
 
 
+@app.route('/login')
+def show_login_form():
+    """Display user log-in page."""
+
+    return render_template('login.html')
+
+
+@app.route('/login', methods=['POST'])
+def submit_login_form():
+    """Check for unique email and password. If correct, log in."""
+
+    email = request.form.get('email')
+    password = request.form.get('password')
+
+    result = User.query.filter((User.email==email) & (User.password==password)).all()
+
+    """NEED TO FIX QUERY TO RETURN ACTUAL RESULT SO WE CAN PULL OUT USER_ID"""
+
+    if result.count() == 0:
+        flash('Username and/or password incorrect.')
+        return redirect('/register')
+    else:
+        session['user_id'] = result.user_id
+        flash('Logged in')
+        return redirect('/')
+
+
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the
     # point that we invoke the DebugToolbarExtension
