@@ -4,7 +4,20 @@
   <title>Ratings</title>
 </head>
 <body>
-  Ratings
+  {% if session.get('user_id'): %}
+    <a href='/logout'>Log Out</a>
+  {% else %}
+    <a href='/login'>Log In</a>
+  {% endif %}
+
+  <br>
+
+  {% for message in get_flashed_messages() %}
+    {{ message }}
+    <br>
+  {% endfor %}
+
+
   <hr>
 
   {% block content %} CONTENT GOES HERE {% endblock %}

@@ -59,7 +59,7 @@ def submit_reg_form():
     return redirect('/')
 
 
-@app.route('/login')
+@app.route('/login', methods=['GET'])
 def show_login_form():
     """Display user log-in page."""
 
@@ -73,17 +73,25 @@ def submit_login_form():
     email = request.form.get('email')
     password = request.form.get('password')
 
-    result = User.query.filter((User.email==email) & (User.password==password)).all()
-
-    """NEED TO FIX QUERY TO RETURN ACTUAL RESULT SO WE CAN PULL OUT USER_ID"""
+    result = User.query.filter((User.email == email) &
+                               (User.password == password))
 
     if result.count() == 0:
         flash('Username and/or password incorrect.')
-        return redirect('/register')
+        return redirect('/login')
     else:
-        session['user_id'] = result.user_id
+        user = result.first()
+        session['user_id'] = user.user_id
         flash('Logged in')
         return redirect('/')
+
+
+@app.route('/logout')
+def submit_logout():
+    """Logs out user by emptying session and redirects to homepage"""
+
+    del session['user_id']
+    return redirect('/')
 
 
 if __name__ == "__main__":
