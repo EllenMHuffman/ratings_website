@@ -45,12 +45,13 @@ def load_movies():
 
         row = row.rstrip()
         row = row.split('|')
+        movie_id = row[0]
         title = row[1][:-7]
         released_at = row[2]
         released_at = datetime.strptime(released_at, '%d-%b-%Y')
         imdb_url = row[4]
 
-        movie = Movie(title=title, released_at=released_at, imdb_url=imdb_url)
+        movie = Movie(movie_id=movie_id, title=title, released_at=released_at, imdb_url=imdb_url)
 
         db.session.add(movie)
 

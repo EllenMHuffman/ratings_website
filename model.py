@@ -24,7 +24,6 @@ class User(db.Model):
     zipcode = db.Column(db.String(15), nullable=True)
     # rating_code = db.Column(db.Integer, db.ForeignKey('ratings.user_id'))
 
-    # rating = db.relationship('Rating')
 
     def __repr__(self):
         """Provide helpful representation when printed."""
@@ -37,13 +36,12 @@ class Movie(db.Model):
 
     __tablename__ = 'movies'
 
-    movie_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    movie_id = db.Column(db.Integer, nullable=False, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
     released_at = db.Column(db.DateTime, nullable=True)
     imdb_url = db.Column(db.String(200), nullable=True)
     # rating_code = db.Column(db.Integer, db.ForeignKey('ratings.movie_id'))
 
-    # rating = db.relationship('Rating')
 
 class Rating(db.Model):
     """Rating for ratings website."""
@@ -51,12 +49,18 @@ class Rating(db.Model):
     __tablename__ = 'ratings'
 
     rating_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    movie_id = db.Column(db.Integer, nullable=False)
-    user_id = db.Column(db.Integer, nullable=False)
+    movie_id = db.Column(db.Integer,
+                         db.ForeignKey('movies.movie_id'),
+                         nullable=False)
+    user_id = db.Column(db.Integer,
+                        db.ForeignKey('users.user_id'),
+                        nullable=False)
     score = db.Column(db.Integer, nullable=False)
 
-    # user = db.relationship('User')
-    # movie = db.relationship('Movie')
+    user = db.relationship('User',
+                           backref=db.backref('ratings', order_by=rating_id))
+    movie = db.relationship('Movie',
+                           backref=db.backref('ratings', order_by=rating_id))
 
 
 ##############################################################################
