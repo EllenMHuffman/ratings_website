@@ -33,6 +33,14 @@ def user_list():
     return render_template("user_list.html", users=users)
 
 
+@app.route('/movies')
+def movie_list():
+    """Show list of movies."""
+
+    movies = Movie.query.order_by('title').all()
+    return render_template("movie_list.html", movies=movies)
+
+
 @app.route('/register')
 def show_reg_form():
     """Display user registration form."""
@@ -104,6 +112,41 @@ def show_user_page(user_id):
     return render_template('user_info.html', user=user,
                            user_ratings=user_ratings)
 
+
+@app.route('/movie/<movie_id>')
+def show_movie_page(movie_id):
+    """Show information relating to specific movie."""
+
+    movie = Movie.query.get(movie_id)
+    movie_ratings = movie.ratings
+
+    return render_template('movie_info.html', movie=movie,
+                           movie_ratings=movie_ratings)
+
+
+@app.route('/add_rating', methods=['POST'])
+def add_rating():
+    """Processes new or updated rating."""
+
+    user_id = request.form.get('user_id')
+    movie_id = request.form.get('movie_id')
+    score = request.form.get('score')
+
+    result = Rating.query.filter((Rating.user_id == user_id) &
+                               (Rating.movie_id == movie_id))
+
+    if result.count() == 0:
+        new_rating = Rating(movie_id=movie_id, score=score, user_id=user_id)
+        db.session.add(new_rating)
+    else:
+        #need to update existing rating and fix add error
+        pass
+
+    db.session.commit()
+
+    flash("Thanks for adding a rating!")
+
+    return redirect('/movie/<movie_id>')
 
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the

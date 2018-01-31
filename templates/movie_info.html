@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h3>Movie Title: {{ movie.title }}</h3>
+
+{% if session['user_id'] %}
+  <form action="/add_rating" method="POST">
+    Add rating: <input type="text" name="rating">
+    <input type="hidden" name="movie_id" value="{{ movie.movie_id }}">
+    <input type="hidden" name="user_id" value="{{ session['user_id'] }}">
+    <input type='submit' value="Submit">
+
+  </form>
+{% endif %}
+
+<b>Ratings:</b>
+
+  {% for rating in movie_ratings %}
+  <!-- LOOOK UP HOW TO INDEX AT A NUMBER IN JINJA FOR LOOP -->
+  <!-- LOOK UP LEN FUNCTION TOO  -->
+    <ul>
+      <li>
+        <b>Score:</b> {{ rating.score }}
+      </li>
+    </ul>
+  {% endfor %}
+
+{% endblock %}
