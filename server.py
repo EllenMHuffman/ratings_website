@@ -94,6 +94,25 @@ def submit_logout():
     return redirect('/')
 
 
+@app.route('/user=<user_id>')
+def show_user_page(user_id):
+    """Show information relating to specific user."""
+
+    user_info = Rating.query.filter(Rating.user_id == user_id).all()
+    # import pdb; pdb.set_trace()
+    zipcode = user_info[0].user.zipcode
+    age = user_info[0].user.age
+
+    # movie_info = db.session.query(Rating.score, Rating.movie.title)
+
+    movie_info = db.session.query(Rating.score, Movie.title).join(Movie)
+    score_title = movie_info.filter(Rating.user_id == user_id).all()
+
+
+
+    return render_template('user_info.html', score_title=score_title,
+                           zipcode=zipcode, age=age, user_id=user_id)
+
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the
     # point that we invoke the DebugToolbarExtension

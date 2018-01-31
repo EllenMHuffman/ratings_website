@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h3>User ID: {{ user_id }}</h3>
+
+<b>Zip code:</b> {{ zipcode }}
+<br>
+<b>Age:</b> {{ age }}
+<br>
+
+  {% for score, movie in score_title %}
+  <!-- LOOOK UP HOW TO INDEX AT A NUMBER IN JINJA FOR LOOP -->
+  <!-- LOOK UP LEN FUNCTION TOO  -->
+    <ul>
+      <li>
+        <b>Movie:</b> {{ movie }}, <b>Rating:</b> {{ score }}
+      </li>
+    </ul>
+  {% endfor %}
+
+{% endblock %}
