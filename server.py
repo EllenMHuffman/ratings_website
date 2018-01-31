@@ -128,9 +128,10 @@ def show_movie_page(movie_id):
 def add_rating():
     """Processes new or updated rating."""
 
-    user_id = request.form.get('user_id')
-    movie_id = request.form.get('movie_id')
-    score = request.form.get('score')
+    user_id = int(request.form.get('user_id'))
+    movie_id = int(request.form.get('movie_id'))
+    score = int(request.form.get('score'))
+    # import pdb; pdb.set_trace()
 
     result = Rating.query.filter((Rating.user_id == user_id) &
                                (Rating.movie_id == movie_id))
@@ -139,14 +140,14 @@ def add_rating():
         new_rating = Rating(movie_id=movie_id, score=score, user_id=user_id)
         db.session.add(new_rating)
     else:
-        #need to update existing rating and fix add error
-        pass
+        row = result.first()
+        row.score = score
 
     db.session.commit()
 
     flash("Thanks for adding a rating!")
 
-    return redirect('/movie/<movie_id>')
+    return redirect('/movie/' + str(movie_id))
 
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the

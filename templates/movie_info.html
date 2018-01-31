@@ -6,7 +6,7 @@
 
 {% if session['user_id'] %}
   <form action="/add_rating" method="POST">
-    Add rating: <input type="text" name="rating">
+    Add or update a rating: <input type="text" name="score">
     <input type="hidden" name="movie_id" value="{{ movie.movie_id }}">
     <input type="hidden" name="user_id" value="{{ session['user_id'] }}">
     <input type='submit' value="Submit">
@@ -17,8 +17,6 @@
 <b>Ratings:</b>
 
   {% for rating in movie_ratings %}
-  <!-- LOOOK UP HOW TO INDEX AT A NUMBER IN JINJA FOR LOOP -->
-  <!-- LOOK UP LEN FUNCTION TOO  -->
     <ul>
       <li>
         <b>Score:</b> {{ rating.score }}
