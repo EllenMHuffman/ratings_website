@@ -83,7 +83,7 @@ def submit_login_form():
         user = result.first()
         session['user_id'] = user.user_id
         flash('Logged in')
-        return redirect('/')
+        return redirect('/user=' + str(user.user_id))
 
 
 @app.route('/logout')
