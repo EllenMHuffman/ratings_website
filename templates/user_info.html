@@ -2,19 +2,19 @@
 
 {% block content %}
 
-<h3>User ID: {{ user_id }}</h3>
+<h3>User ID: {{ user.user_id }}</h3>
 
-<b>Zip code:</b> {{ zipcode }}
+<b>Zip code:</b> {{ user.zipcode }}
 <br>
-<b>Age:</b> {{ age }}
+<b>Age:</b> {{ user.age }}
 <br>
 
-  {% for score, movie in score_title %}
+  {% for rating in user_ratings %}
   <!-- LOOOK UP HOW TO INDEX AT A NUMBER IN JINJA FOR LOOP -->
   <!-- LOOK UP LEN FUNCTION TOO  -->
     <ul>
       <li>
-        <b>Movie:</b> {{ movie }}, <b>Rating:</b> {{ score }}
+        <b>Movie:</b> {{ rating.movie.title }}, <b>Rating:</b> {{ rating.score }}
       </li>
     </ul>
   {% endfor %}

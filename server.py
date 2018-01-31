@@ -83,7 +83,7 @@ def submit_login_form():
         user = result.first()
         session['user_id'] = user.user_id
         flash('Logged in')
-        return redirect('/user=' + str(user.user_id))
+        return redirect('/user/' + str(user.user_id))
 
 
 @app.route('/logout')
@@ -94,24 +94,16 @@ def submit_logout():
     return redirect('/')
 
 
-@app.route('/user=<user_id>')
+@app.route('/user/<user_id>')
 def show_user_page(user_id):
     """Show information relating to specific user."""
 
-    user_info = Rating.query.filter(Rating.user_id == user_id).all()
-    # import pdb; pdb.set_trace()
-    zipcode = user_info[0].user.zipcode
-    age = user_info[0].user.age
+    user = User.query.get(user_id)
+    user_ratings = user.ratings
 
-    # movie_info = db.session.query(Rating.score, Rating.movie.title)
+    return render_template('user_info.html', user=user,
+                           user_ratings=user_ratings)
 
-    movie_info = db.session.query(Rating.score, Movie.title).join(Movie)
-    score_title = movie_info.filter(Rating.user_id == user_id).all()
-
-
-
-    return render_template('user_info.html', score_title=score_title,
-                           zipcode=zipcode, age=age, user_id=user_id)
 
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the
