@@ -2,12 +2,18 @@
 <html>
 <head>
   <title>Ratings</title>
+  <style>
+    body {
+      background-color: #b2ffd6
+    }
+  </style>
 </head>
 <body>
+  <button type="button" id="home">Home</button>
   {% if session.get('user_id'): %}
-    <a href='/logout'>Log Out</a>
+  <button type="button" id="out-button">Log out</button>
   {% else %}
-    <a href='/login'>Log In</a>
+  <button type="button" id="in-button">Log in</button>
   {% endif %}
 
   <br>
@@ -21,6 +27,20 @@
   <hr>
 
   {% block content %} CONTENT GOES HERE {% endblock %}
-  
+
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
+  <script>
+
+  {% block javascript %}
+
+  $('#in-button').on('click', ()=> location.href='/login')
+  $('#out-button').on('click', ()=> location.href='/logout')
+  $('#home').on('click', ()=> location.href='/')
+
+  {% endblock %}
+
+  </script>
+
 </body>
 </html>
