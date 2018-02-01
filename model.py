@@ -51,6 +51,29 @@ class User(db.Model):
         else:
             return 0.0
 
+    def predict_rating(self, movie):
+        """Predict user's rating of a movie."""
+
+        other_ratings = movie.ratings
+        # import pdb;pdb.set_trace()
+        similarities = [
+            (self.similarity(r.user), r)
+            for r in other_ratings
+        ]
+
+        similarities.sort(reverse=True)
+
+        similarities = [(sim, r) for sim, r in similarities
+                        if sim > 0]
+
+        if not similarities:
+            return None
+
+        numerator = sum([r.score * sim for sim, r in similarities])
+        denominator = sum([sim for sim, r in similarities])
+
+        return numerator/denominator
+
 
 class Movie(db.Model):
     """Movie of ratings website."""
@@ -95,6 +118,9 @@ def connect_to_db(app):
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.app = app
     db.init_app(app)
+
+
+
 
 
 if __name__ == "__main__":

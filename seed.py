@@ -13,7 +13,7 @@ from datetime import *
 def load_users():
     """Load users from u.user into database."""
 
-    print "Users"
+    # print "Users"
 
     # Delete all rows in table, so if we need to run this a second time,
     # we won't be trying to add duplicate users
@@ -67,7 +67,7 @@ def load_ratings():
 
         row = row.rstrip()
         row = row.split('\t')
-        movie_id, user_id, score, _ = row
+        user_id, movie_id, score, _ = row
 
         rating = Rating(movie_id=movie_id, user_id=user_id, score=score)
 
