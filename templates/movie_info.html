@@ -14,6 +14,12 @@
   </form>
 {% endif %}
 
+<p><b>Average rating:</b> {{ average }}</p>
+{% if prediction %}
+  <p>We predict you will rate this movie {{ prediction }}.</p>
+{% endif %}
+<br>
+
 <b>Ratings:</b>
 
   {% for rating in movie_ratings %}
