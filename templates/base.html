@@ -17,6 +17,32 @@
   {% endif %}
 
   <br>
+  <div id="login-form" style="display:none;">
+    <h1>Log In</h1>
+
+    <form action="/login" method="POST">
+      Email:<input type="text" name="email">
+      <br>
+      Password:<input type="text" name="password">
+      <br>
+      <input type="submit" value="Submit">
+    </form>
+    <br>
+    Don't have an account?
+    <button type='button' id='register'>Register</button>
+  </div>
+  <div id="register-form" style="display:none;">
+    <h1>Registration Form</h1>
+
+    <form action="/register" method="POST">
+      Email:<input type="text" name="email">
+      <br>
+      Password:<input type="text" name="password">
+      <br>
+      <input type="submit" value="Sign Up">
+    </form>
+  </div>
+  <br>
 
   {% for message in get_flashed_messages() %}
     {{ message }}
@@ -34,9 +60,25 @@
 
   {% block javascript %}
 
-  $('#in-button').on('click', ()=> location.href='/login')
-  $('#out-button').on('click', ()=> location.href='/logout')
-  $('#home').on('click', ()=> location.href='/')
+  function showLogin() {
+    $("#login-form").show();
+    $('#in-button').hide();
+  }
+
+    function showRegister() {
+    $("#register-form").show();
+    $('#in-button').hide();
+    $('#login-form').hide();
+  }
+
+  $('#out-button').on('click', ()=> location.href='/logout');
+  $('#home').on('click', ()=> location.href='/');
+  $('#register').on('click', showRegister);
+  $('#in-button').on('click', showLogin);
+
+
+
+
 
   {% endblock %}
 
