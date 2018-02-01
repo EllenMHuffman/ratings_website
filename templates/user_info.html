@@ -9,14 +9,16 @@
 <b>Age:</b> {{ user.age }}
 <br>
 
+  <table>
+    <tr>
+      <th>Movie</th>
+      <th>Rating</th>
+    </tr>
   {% for rating in user_ratings %}
-  <!-- LOOOK UP HOW TO INDEX AT A NUMBER IN JINJA FOR LOOP -->
-  <!-- LOOK UP LEN FUNCTION TOO  -->
-    <ul>
-      <li>
-        <b>Movie:</b> {{ rating.movie.title }}, <b>Rating:</b> {{ rating.score }}
-      </li>
-    </ul>
+    <tr>
+      <td>{{ rating.movie.title }}</td>
+      <td>{{ rating.score }}</td>
+    </tr>
   {% endfor %}
-
+  </table>
 {% endblock %}
