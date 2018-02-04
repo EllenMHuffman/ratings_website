@@ -13,10 +13,7 @@ from datetime import *
 def load_users():
     """Load users from u.user into database."""
 
-    # print "Users"
-
-    # Delete all rows in table, so if we need to run this a second time,
-    # we won't be trying to add duplicate users
+    # Delete all rows in table to prevent duplication if run multiple times
     User.query.delete()
 
     # Read u.user file and insert data
@@ -28,10 +25,9 @@ def load_users():
                     age=age,
                     zipcode=zipcode)
 
-        # We need to add to the session or it won't ever be stored
         db.session.add(user)
 
-    # Once we're done, we should commit our work
+
     db.session.commit()
 
 
@@ -89,6 +85,29 @@ def set_val_user_id():
     db.session.commit()
 
 
+def add_eye_user():
+    """Add special user The Eye"""
+
+    the_eye = User(email="the-eye@of-judgment.com", password="evil")
+    db.session.add(the_eye)
+    db.session.commit()
+
+
+def load_eye_ratings():
+    """Load baseline ratings for The Eye user."""
+
+    eye = User.query.filter_by(email="the-eye@of-judgment.com").one()
+
+    # Baseline movie_id and their ratings by The Eye
+    movie_ratings = {1: 1, 1274: 5, 373: 5, 314: 5, 95: 1, 71: 1}
+
+    for movie_id, score in movie_ratings.iteritems():
+        r = Rating(user_id=eye.user_id, movie_id=movie_id, score=score)
+        db.session.add(r)
+
+    db.session.commit()
+
+
 if __name__ == "__main__":
     connect_to_db(app)
 
@@ -100,3 +119,5 @@ if __name__ == "__main__":
     load_movies()
     load_ratings()
     set_val_user_id()
+    add_eye_user()
+    load_eye_ratings()
