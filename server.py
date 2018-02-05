@@ -13,16 +13,16 @@ app = Flask(__name__)
 # Required to use Flask sessions and the debug toolbar
 app.secret_key = "ABC"
 
-# Normally, if you use an undefined variable in Jinja2, it fails
-# silently. This is horrible. Fix this so that, instead, it raises an
-# error.
+# Raise error if undefined variable is used in Jinja2
 app.jinja_env.undefined = StrictUndefined
 
 
 @app.route('/')
 def index():
     """Homepage."""
-    return render_template('homepage.html')
+
+    invalid = request.args.get('invalid')
+    return render_template('homepage.html', invalid=invalid)
 
 
 @app.route('/users')
@@ -68,13 +68,6 @@ def submit_reg_form():
     return redirect('/')
 
 
-@app.route('/login', methods=['GET'])
-def show_login_form():
-    """Display user log-in page."""
-
-    return render_template('login.html')
-
-
 @app.route('/login', methods=['POST'])
 def submit_login_form():
     """Check for unique email and password. If correct, log in."""
@@ -86,8 +79,8 @@ def submit_login_form():
                                (User.password == password))
 
     if result.count() == 0:
-        flash('Username and/or password incorrect.')
-        return redirect('/login')
+        # flash('Username and/or password incorrect.')
+        return redirect('/?invalid=True')
     else:
         user = result.first()
         session['user_id'] = user.user_id
@@ -230,11 +223,11 @@ if __name__ == "__main__":
     # point that we invoke the DebugToolbarExtension
     # app.debug = True
     # make sure templates, etc. are not cached in debug mode
-    # app.jinja_env.auto_reload = app.debug
+    app.jinja_env.auto_reload = app.debug
 
     connect_to_db(app)
 
     # Use the DebugToolbar
-    DebugToolbarExtension(app)
+    # DebugToolbarExtension(app)
 
     app.run(port=5000, host='0.0.0.0')

@@ -9,73 +9,83 @@
   </style>
 </head>
 <body>
-  <button type="button" id="home">Home</button>
+  <!-- Display Log In or Log Out based on session data -->
+  <button type='button' id='home'>Home</button>
+  <button type='button' class='register' id='main-r'>Register</button>
   {% if session.get('user_id'): %}
-  <button type="button" id="out-button">Log out</button>
+  <button type='button' id='out-button'>Log out</button>
   {% else %}
-  <button type="button" id="in-button">Log in</button>
+  <button type='button' class='login' id='main-in'>Log in</button>
   {% endif %}
 
   <br>
-  <div id="login-form" style="display:none;">
+  <!-- Hidden Log In form, revealed if user clicks Log In button-->
+  <div id='login-form' style='display:none;'>
     <h1>Log In</h1>
 
-    <form action="/login" method="POST">
-      Email:<input type="text" name="email">
+    <form action='/login' method='POST'>
+      Email:<input type='text' name='email'>
       <br>
-      Password:<input type="text" name="password">
+      Password:<input type='text' name='password'>
       <br>
-      <input type="submit" value="Submit">
+      <input type='submit' value='Submit'>
     </form>
     <br>
     Don't have an account?
-    <button type='button' id='register'>Register</button>
+    <button type='button' class='register' id='alt-r'>Register</button>
   </div>
-  <div id="register-form" style="display:none;">
+
+  <!-- Hidden Register form, revealed if user clicks Register button -->
+  <div id='register-form' style='display:none;'>
     <h1>Registration Form</h1>
 
-    <form action="/register" method="POST">
-      Email:<input type="text" name="email">
+    <form action='/register' method='POST'>
+      Email:<input type='text' name='email'>
       <br>
-      Password:<input type="text" name="password">
+      Password:<input type='text' name='password'>
       <br>
-      <input type="submit" value="Sign Up">
+      <input type='submit' value='Sign Up'>
     </form>
+    <br>
+    Already have an account?
+    <button type='button' class='login' id='alt-in'>Log In</button>
   </div>
   <br>
-
-  {% for message in get_flashed_messages() %}
-    {{ message }}
-    <br>
-  {% endfor %}
-
 
   <hr>
 
   {% block content %} CONTENT GOES HERE {% endblock %}
 
-  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src='https://code.jquery.com/jquery-3.2.1.min.js'></script>
 
   <script>
 
   {% block javascript %}
 
+  {% if invalid is defined  and invalid %}
+    alert('Invalid username and/or password');
+    showLogin();
+  {% endif %}
+
+
   function showLogin() {
-    $("#login-form").show();
-    $('#in-button').hide();
+    $('#login-form').show();
+    $('#main-in').hide();
+    $('#main-r').hide();
+    $('#register-form').hide();
   }
 
-    function showRegister() {
-    $("#register-form").show();
-    $('#in-button').hide();
+  function showRegister() {
+    $('#register-form').show();
+    $('#main-in').hide();
     $('#login-form').hide();
+    $('#main-r').hide();
   }
 
   $('#out-button').on('click', ()=> location.href='/logout');
   $('#home').on('click', ()=> location.href='/');
-  $('#register').on('click', showRegister);
-  $('#in-button').on('click', showLogin);
-
+  $('.login').on('click', showLogin);
+  $('.register').on('click', showRegister);
 
   {% endblock %}
 
